@@ -29,29 +29,36 @@ const generatePassword = (length, options) => {
   };
   
   // TODO: Add event listener to the button to call generatePassword and display the output
-  function handleGeneratePassword() {
-    const length = parseInt(document.getElementById("length").value);
+  document.getElementById("generateBtn").addEventListener("click", () => {
+    const length = parseInt(document.getElementById("passwordLength").value);
     const options = {
       includeUppercase: document.getElementById("includeUppercase").checked,
       includeLowercase: document.getElementById("includeLowercase").checked,
       includeNumbers: document.getElementById("includeNumbers").checked,
-      includeSpecialChars: document.getElementById("includeSpecialChars").checked,
+      includeSpecialChars: document.getElementById("includeSpecialChars").checked
     };
   
-    const password = generatePassword(length, options);
-    document.getElementById("passwordOutput").textContent = password;
-  }
+    try {
+      const generatedPassword = generatePassword(length, options);
+      document.getElementById("passwordOutput").innerText = generatedPassword;
+    } catch (error) {
+      alert(error.message);
+    }
+  });
   // BONUS: Implement the copy to clipboard functionality
-  function copyToClipboard() {
-    const password = document.getElementById("passwordOutput").textContent;
-    if (password) {
-      navigator.clipboard.writeText(password).then(() => {
+  document.getElementById("copyBtn").addEventListener("click", () => {
+    const passwordOutput = document.getElementById("passwordOutput").innerText;
+    if (passwordOutput) {
+      navigator.clipboard.writeText(passwordOutput).then(() => {
         alert("Password copied to clipboard!");
+      }).catch(err => {
+        console.error("Failed to copy: ", err);
       });
     } else {
       alert("No password to copy!");
     }
-  }
+  });
+  
   module.exports = {
     generatePassword,
   };
